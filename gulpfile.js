@@ -49,24 +49,22 @@ gulp.task('sass', function() {
         .pipe($.sass())
         .pipe($.autoprefixer())
         .pipe($.header(banner, meta))
-        // .pipe(gulp.dest(distDir + "/css")) //
         .pipe($.if(!argv.dev, $.minifyCss()))
         .pipe($.if(!argv.dev, $.rename(meta.name + '.min.css')))
         .pipe($.if(!argv.dev, gulp.dest(distDir + "/css")));
 });
 
 gulp.task('scripts', function() {
-return gulp.src([jsDir + '*.js'])
-    .pipe($.plumber({ errorHandler: onError }))
-    // .pipe(gulp.dest(distDir + "/js")) //
-    .pipe($.umd(umdDeps))
-    .pipe($.header(banner, meta))
-    .pipe($.rename(meta.name + '.js'))
-    // .pipe(gulp.dest(distDir + "/js")) 
-    .pipe($.if(!argv.dev, $.uglify()))
-    .pipe($.if(!argv.dev, $.header(banner, meta)))
-    .pipe($.if(!argv.dev, $.rename(meta.name + '.min.js')))
-    .pipe($.if(!argv.dev, gulp.dest(distDir + "/js")));
+    return gulp.src([jsDir + '*.js'])
+        .pipe($.plumber({ errorHandler: onError }))
+        .pipe($.umd(umdDeps))
+        .pipe($.header(banner, meta))
+        .pipe($.rename(meta.name + '.js'))
+        // .pipe(gulp.dest(distDir + "/js")) 
+        .pipe($.if(!argv.dev, $.uglify()))
+        .pipe($.if(!argv.dev, $.header(banner, meta)))
+        .pipe($.if(!argv.dev, $.rename(meta.name + '.min.js')))
+        .pipe($.if(!argv.dev, gulp.dest(distDir + "/js")));
 });
 
 
