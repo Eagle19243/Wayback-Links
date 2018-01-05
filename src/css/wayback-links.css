@@ -29,7 +29,7 @@
     width: 0;
     border: 5px solid transparent;
     border-top-color: #000;
-    left: 9px;   
+    left: 9px;
     top: 8px;
     position: relative;
     margin-right: 8px;
@@ -63,7 +63,7 @@ ul.WLMenu{
     text-align: center;
 }
 
-[aria-label^="WLOuter"] a.WLItem:hover { 
+[aria-label^="WLOuter"] a.WLItem:hover {
     background-color: lightgrey;
 }
 
