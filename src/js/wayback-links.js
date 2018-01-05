@@ -1,43 +1,35 @@
-// robustlinks.js
-// @author Yorick Chollet <yorick.chollet@gmail.com>
-// @author Harihar Shankar <hariharshankar@gmail.com>
-// @version 1.2
-// License can be obtained at http://mementoweb.github.io/SiteStory/license.html 
+// toggle to show the "powered by wayback links" footer
+// var WLshowFooter = true;
 
-// toggle to show the "powered by robust links" footer
-// var RLshowFooter = true;
-
-// add urls that should be excluded from robust links.
+// add urls that should be excluded from wayback links.
 // accepts full urls or valid regular expression patterns of urls.
-var RLuriPatternsToExclude = [
+var WLuriPatternsToExclude = [
     "https?://dx.doi.org*",
     "https?://doi.org*"
 ];
 
 // Determining what is a URL. In this case, either a relative path or a HTTP/HTTPS scheme.
-var RLhasHTTPRegexp = /^https?:/;
-var RLhasColonRegexp = /:/;
-function RLIsURL(href) {
-    return Boolean(href) && (RLhasHTTPRegexp.test(href) || !RLhasColonRegexp.test(href));
+var WLhasHTTPRegexp = /^https?:/;
+var WLhasColonRegexp = /:/;
+function WLIsURL(href) {
+    return Boolean(href) && (WLhasHTTPRegexp.test(href) || !WLhasColonRegexp.test(href));
 }
 
-// Contains URIs of web archives that should be excluded from robust links.
+// Contains URIs of web archives that should be excluded from wayback links.
 // This list includes base URIs of web archives that rewrite memento urls.
 // If unsure, do not edit.
-var RLWebArchiveBaseUriToExclude = [
+var WLWebArchiveBaseUriToExclude = [
     "https?://webarchive.nationalarchives.gov.uk/*",
     "https?://web.archive.org/*"
 ];
 
-
 // schema.org attributes to support
-var RLSchemaOrgAttributes = {
-    "datePublished": "Get near page creation date ",
-    "dateModified": "Get near page modified date "
+var WLSchemaOrgAttributes = {
+    "date-published": "Get near page creation date ",
+    "date-modified": "Get near page modified date "
 }
 
 // Helper function to provide indexOf for Internet Explorer
-// from http://stackoverflow.com/questions/2430000/determine-if-string-is-in-list-in-javascript
 if (!Array.prototype.indexOf) {
    Array.prototype.indexOf = function(item) {
       var i = this.length;
@@ -50,16 +42,16 @@ if (!Array.prototype.indexOf) {
 
 // Creates a pseudorandom unique ID
 // from https://gist.github.com/gordonbrander/2230317
-var RL_ID = function () {
-  return 'RL_' + Math.random().toString(36).substr(2, 9);
+var WL_ID = function () {
+  return 'WL_' + Math.random().toString(36).substr(2, 9);
 };
 
 // Appends creates a list-item link to `uri` with `text` and appends it to `parent`
-function RL_appendHiddenLink(parent, text, uri) {
+function WL_appendHiddenLink(parent, text, uri) {
     var listItem = document.createElement('li');
     var linkItem = document.createElement('div');
     var listLink = document.createElement('a');
-    listLink.setAttribute('class', 'robustLinks RLItem');
+    listLink.setAttribute('class', 'waybackLinks WLItem');
     listLink.href = uri;
     listLink.innerHTML = text;
 
@@ -70,7 +62,7 @@ function RL_appendHiddenLink(parent, text, uri) {
 
 // Adds leading '0' to numbers
 // From http://www.w3schools.com/jsref/jsref_gethours.asp
-function RLAddZero(i) {
+function WLAddZero(i) {
     if (i < 10) {
         i = "0" + i;
     }
@@ -78,7 +70,7 @@ function RLAddZero(i) {
 }
 
 // Formats the dateStr in the aggregator format YYYYMMDDHHmmSS
-function RLFormatDate(dateStr) {
+function WLFormatDate(dateStr) {
     var date = new Date(dateStr);
     if(isNaN(date)){
         // Tires to fix the date before passing it to rigourous parsers (e.g. Mozilla)
@@ -89,17 +81,17 @@ function RLFormatDate(dateStr) {
     }
     var datestring = '';
     datestring += date.getUTCFullYear();
-    datestring += RLAddZero(date.getUTCMonth()+1);//  getMonth start at 0
-    datestring += RLAddZero(date.getUTCDate());
-    datestring += RLAddZero(date.getUTCHours());
-    datestring += RLAddZero(date.getUTCMinutes());
-    datestring += RLAddZero(date.getUTCSeconds());
+    datestring += WLAddZero(date.getUTCMonth()+1);//  getMonth start at 0
+    datestring += WLAddZero(date.getUTCDate());
+    datestring += WLAddZero(date.getUTCHours());
+    datestring += WLAddZero(date.getUTCMinutes());
+    datestring += WLAddZero(date.getUTCSeconds());
     return datestring;
 }
 
 // Formats the dateStr in the readable format YYYY-MM-DD HH:mm:SS
-function RLPrintDate(dateStr){
-    var formatted = RLFormatDate(dateStr);
+function WLPrintDate(dateStr){
+    var formatted = WLFormatDate(dateStr);
     var date = formatted.substr(0, 4) + '-' + formatted.substr(4, 2)+ '-' + formatted.substr(6, 2);
 
     if (formatted.substr(8, 6) != '000000'){
@@ -109,9 +101,9 @@ function RLPrintDate(dateStr){
 }
 
 // Extracts the domain name from an archive url.
-var RLDomainRegExp = new RegExp('(?:https?://)?(?:www\\.)?((?:[A-Za-z0-9_\\.])+)(?:/.*)?','i');
-function RLPrintDomainName(url) {
-    var match = url.match(RLDomainRegExp);
+var WLDomainRegExp = new RegExp('(?:https?://)?(?:www\\.)?((?:[A-Za-z0-9_\\.])+)(?:/.*)?','i');
+function WLPrintDomainName(url) {
+    var match = url.match(WLDomainRegExp);
     if (match){
         if (match.length > 1) {
             var domain_name =  match[1];
@@ -126,16 +118,16 @@ function RLPrintDomainName(url) {
 }
 
 // Keeps track of the last open menu to close it.
-var RLLastOpen;
-function RLCloseLastOpen(){
-    if(RLLastOpen){
-        RLLastOpen.setAttribute('aria-hidden', 'true');
-        RLLastOpen = null;
+var WLLastOpen;
+function WLCloseLastOpen(){
+    if(WLLastOpen){
+        WLLastOpen.setAttribute('aria-hidden', 'true');
+        WLLastOpen = null;
     }
 }
 
 // Extracts information 
-function RLGetAttribute(obj, str){
+function WLGetAttribute(obj, str){
     try{
         return obj.getAttribute(str).trim();
     } catch(err) {
@@ -149,15 +141,14 @@ document.addEventListener('DOMContentLoaded', function() {
     // Extracts page information
     var metas = document.getElementsByTagName("meta");
     var metaDates = {}
-    //var datePublishLinkStr = "";
-    //var datePublishPrintStr = "";
+
     for(var i=0; i<metas.length; i++) {
-        var metaAttr = RLGetAttribute(metas[i], "itemprop");
-        if (metaAttr in RLSchemaOrgAttributes) { 
-            var mdate = RLGetAttribute(metas[i], "content");
+        var metaAttr = WLGetAttribute(metas[i], "itemprop");
+        if (metaAttr in WLSchemaOrgAttributes) { 
+            var mdate = WLGetAttribute(metas[i], "content");
             metaDates[metaAttr] = {"linkstr": "", "printstr": ""};
-            metaDates[metaAttr]["linkstr"] = RLFormatDate(mdate);
-            metaDates[metaAttr]["printstr"] = RLPrintDate(mdate);
+            metaDates[metaAttr]["linkstr"] = WLFormatDate(mdate);
+            metaDates[metaAttr]["printstr"] = WLPrintDate(mdate);
         }
     }
 
@@ -165,7 +156,7 @@ document.addEventListener('DOMContentLoaded', function() {
     var links = document.getElementsByTagName("a");
     for(var i=0; i<links.length; i++) {
         // Extracts link information
-        var linkHREF =  RLGetAttribute(links[i], 'href');
+        var linkHREF =  WLGetAttribute(links[i], 'href');
         if (!linkHREF.search("http") == 0) {
             var loc = window.location;
             var abLink = loc.protocol + "//" + loc.host;
@@ -176,86 +167,86 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         // The original is either in the attribute or in the href
-        var original =  RLGetAttribute(links[i], 'data-originalurl');
+        var original =  WLGetAttribute(links[i], 'data-original-url');
         var hasOriginal = Boolean(original);
         if (!hasOriginal){
             original = linkHREF;
         }
-        // The memento url is either data-versionurl or in the href if data-originalurl exists
-        var memento =  RLGetAttribute(links[i], 'data-versionurl');
+        // The memento url is either data-version-url or in the href if data-original-url exists
+        var memento =  WLGetAttribute(links[i], 'data-version-url');
         var hasMemento = Boolean(memento);
         if(!hasMemento && hasOriginal) {
             memento = linkHREF;
         }
         // The datetime is the data-versiondate
-        var datetime = RLGetAttribute(links[i], 'data-versiondate');
+        var datetime = WLGetAttribute(links[i], 'data-version-date');
         var hasDatetime = Boolean(datetime);
 
         // Menu appearance conditions
         // Constructs the regular expression of restricted URIs from the baseRestrictedURI and the ones given in parameters
-        var RLRestrictedRegexp = new RegExp('(?:'+RLuriPatternsToExclude.concat(RLWebArchiveBaseUriToExclude).join(')|(?:')+')');
+        var WLRestrictedRegexp = new RegExp('(?:'+WLuriPatternsToExclude.concat(WLWebArchiveBaseUriToExclude).join(')|(?:')+')');
 
         var showLink  = (links[i].href.length > 0 &&  // no inner/empty links
-            (' ' + links[i].className+' ').indexOf(' robustLinks ') < 0 &&  // not a link we created
+            (' ' + links[i].className+' ').indexOf(' waybackLinks ') < 0 &&  // not a link we created
             ((Object.keys(metaDates).length > 0 || hasOriginal || hasMemento || hasDatetime) && // one menu item at least
-            ! RLRestrictedRegexp.test(linkHREF)) && // .href can be rewritten. but so is the regexp 
-            RLIsURL(linkHREF));  // test the cleaned uri
+            ! WLRestrictedRegexp.test(linkHREF)) && // .href can be rewritten. but so is the regexp 
+            WLIsURL(linkHREF));  // test the cleaned uri
 
         if (showLink){
-            var popupID = RL_ID();
+            var popupID = WL_ID();
 
-            var robustLinksElement = document.createElement('span');
-            robustLinksElement.setAttribute('role',"navigation");
-            robustLinksElement.setAttribute('aria-label', 'RLElement');
+            var waybackLinksElement = document.createElement('span');
+            waybackLinksElement.setAttribute('role',"navigation");
+            waybackLinksElement.setAttribute('aria-label', 'WLElement');
 
             // Only one menu (the arrow link)
             var outer = document.createElement('ul');
             var dropDownList = document.createElement('li');
-            dropDownList.setAttribute('aria-label', 'RLOuter');
+            dropDownList.setAttribute('aria-label', 'WLOuter');
             var arrowDown = document.createElement('a');
             arrowDown.href = "";
             arrowDown.setAttribute('aria-haspopup', 'true');
-            arrowDown.setAttribute('class', 'robustLinks dropDownButton RLArrow');
+            arrowDown.setAttribute('class', 'waybackLinks dropDownButton WLArrow');
             arrowDown.setAttribute('aria-controls', popupID);
 
             // The link glyph
             var linkChar = document.createElement('div');
-            linkChar.setAttribute('class','robustLinks dropDownButton RLIcon');
+            linkChar.setAttribute('class','waybackLinks dropDownButton WLIcon');
 
             // The dropdown menu
             var dropDownItem = document.createElement('ul');
-            dropDownItem.setAttribute('class', 'RLMenu');
+            dropDownItem.setAttribute('class', 'WLMenu');
             dropDownItem.id = popupID;
             dropDownItem.setAttribute('aria-hidden', 'true');
 
             // Adds the title to the dropdown menu
             var listItem = document.createElement('li');
-            listItem.setAttribute('class', 'RLTitle');
-            listItem.innerHTML = 'Robust Links';
+            listItem.setAttribute('class', 'WLTitle');
+            listItem.innerHTML = 'Wayback Links';
             dropDownItem.appendChild(listItem);
 
             // Adds the Menu Items to the dropdown menu
             for (metaAttr in metaDates) {
                 var link = "https:"+"//timetravel.mementoweb.org/memento/"+metaDates[metaAttr]["linkstr"]+'/'+original;
-                RL_appendHiddenLink(dropDownItem, RLSchemaOrgAttributes[metaAttr] + metaDates[metaAttr]["printstr"], link);
+                WL_appendHiddenLink(dropDownItem, WLSchemaOrgAttributes[metaAttr] + metaDates[metaAttr]["printstr"], link);
             }
             if(hasDatetime){
-                var linkDateStr = RLFormatDate(datetime);
+                var linkDateStr = WLFormatDate(datetime);
                 var link = "https:"+"//timetravel.mementoweb.org/memento/"+linkDateStr+'/'+original;
-                RL_appendHiddenLink(dropDownItem, 'Get near link date '+ RLPrintDate(datetime), link);
+                WL_appendHiddenLink(dropDownItem, 'Get near link date '+ WLPrintDate(datetime), link);
             }
             if(hasMemento || hasOriginal){
-                RL_appendHiddenLink(dropDownItem, 'Get from '+ RLPrintDomainName(memento), memento);
+                WL_appendHiddenLink(dropDownItem, 'Get from '+ WLPrintDomainName(memento), memento);
             }
             if(hasOriginal){
-                RL_appendHiddenLink(dropDownItem, 'Get at current date', original);
+                WL_appendHiddenLink(dropDownItem, 'Get at current date', original);
             }
 
             dropDownList.appendChild(arrowDown);
             dropDownList.appendChild(dropDownItem);
 
             outer.appendChild(dropDownList);
-            robustLinksElement.appendChild(outer);
+            waybackLinksElement.appendChild(outer);
 
             arrowDown.parentNode.insertBefore(linkChar, arrowDown);
 
@@ -263,31 +254,32 @@ document.addEventListener('DOMContentLoaded', function() {
             arrowDown.onclick = function(e) {
                 var region = document.getElementById(this.getAttribute('aria-controls'));
                 var isClosed = region.getAttribute('aria-hidden') == 'true' ;
-                RLCloseLastOpen();
+                WLCloseLastOpen();
                   if (isClosed) {
                     region.setAttribute('aria-hidden', 'false');
-                    RLLastOpen = region;
+                    WLLastOpen = region;
                   } else { // region is expanded
                        region.setAttribute('aria-hidden', 'true');
-                       RLLastOpen = null;
+                       WLLastOpen = null;
                 }
-                  e.stopPropagation();
+
+                e.stopPropagation();
 
                 return false;
 
             };
 
-            // Insert the robustLinks element directly after the link
-            links[i].parentNode.insertBefore(robustLinksElement, links[i].nextSibling);
+            // Insert the waybackLinks element directly after the link
+            links[i].parentNode.insertBefore(waybackLinksElement, links[i].nextSibling);
         }
 
     }
 
     // Clicking anywhere closes the RLLastOpen menu item if it is present.
-    document.onclick = RLCloseLastOpen;
+    document.onclick = WLCloseLastOpen;
 
     /*
-    // Show the 'powered by RobustLinks' link
+    // Show the 'powered by WaybackLinks' link
     if (RLshowFooter){
         var footer = document.createElement('footer');
         footer.setAttribute('class', "RLFooter");

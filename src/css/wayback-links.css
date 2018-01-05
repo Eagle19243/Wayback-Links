@@ -1,14 +1,4 @@
-/* --------------------------------------------------------
-Style Sheet for RobustLinks JavaScript
-version: 1.0
-last modified: 2015-03-04
-author: Yorick Chollet
-email: yorick.chollet@gmail.com
-website: http://robustlinks.mementoweb.org/
-license: http://mementoweb.github.io/SiteStory/license.html
-----------------------------------------------------------*/
-
-[aria-label^="RLElement"] ul {
+[aria-label^="WLElement"] ul {
     list-style: none;
     display: inline-block;
     position: relative;
@@ -16,11 +6,11 @@ license: http://mementoweb.github.io/SiteStory/license.html
     margin: 0;
 }
 
-[aria-label^="RLOuter"] li {
+[aria-label^="WLOuter"] li {
     list-style: none;
 }
 
-.RLIcon{
+.WLIcon{
     border-radius: 0;
     width: 1px;
     height: 1px;
@@ -31,26 +21,24 @@ license: http://mementoweb.github.io/SiteStory/license.html
     left: 2px;
 }
 
-[aria-label^="RLOuter"] a.RLArrow {
+[aria-label^="WLOuter"] a.WLArrow {
     color: black;
     display: inline-block;
     text-decoration: none;
-    /*http://stackoverflow.com/questions/2701192/character-for-up-down-triangle-arrow-to-display-in-html*/
-   height: 0;
-   width: 0;
-   border: 5px solid transparent;
-   border-top-color: #000;
-   left: 9px;   
-   top: 8px;
-
+    height: 0;
+    width: 0;
+    border: 5px solid transparent;
+    border-top-color: #000;
+    left: 9px;   
+    top: 8px;
     position: relative;
-      margin-right: 8px;
+    margin-right: 8px;
 }
 
-ul.RLMenu{
+ul.WLMenu{
     position: absolute;
     top: 20px;
-    left: -135px;
+    left: -50px;
     background: #fff;
     list-style: none;
     border: 1px solid;
@@ -59,22 +47,23 @@ ul.RLMenu{
     width: 320px;
 }
 
-[aria-label^="RLOuter"] a.RLItem {
+[aria-label^="WLOuter"] a.WLItem {
     color: black;
     text-decoration: none;
     display: block;
-    padding: 10px;
+    padding: 5px;
 }
 
-[aria-label^="RLOuter"] .RLTitle {
-    color: black;
+[aria-label^="WLOuter"] .WLTitle {
+    color: #ae2c31;
     text-decoration: none;
     display: block;
-    padding: 10px;
+    padding: 5px;
+    font-size: 20px;
     text-align: center;
 }
 
-[aria-label^="RLOuter"] a.RLItem:hover { 
+[aria-label^="WLOuter"] a.WLItem:hover { 
     background-color: lightgrey;
 }
 
@@ -90,11 +79,10 @@ ul[aria-hidden="false"] {
     display: inline-block;
 }
 
-footer.RLFooter{
+footer.WLFooter{
     display: block;
     font-family: Helvetica;
     text-align: center;
     font-size: 1em;
     background-color: lightgrey;
-
 }
