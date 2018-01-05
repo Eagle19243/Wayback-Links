@@ -1,0 +1,20 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <link rel = "stylesheet" href = "../build/css/radial-tree.min.css">
+        <script src="../node_modules/jquery/dist/jquery.js"></script>
+        <script src="../src/js/d3.js"></script>
+        <script src="../build/js/radial-tree.min.js"></script>
+    </head>
+    <body>
+        <div id="rt_container1"></div>
+        <div id="rt_container2"></div>
+    </body>
+    <script>
+        var rt = new RadialTree(document.getElementById("rt_container1"),{
+            url : "iskme.org"
+        });
+    </script>
+</html>
