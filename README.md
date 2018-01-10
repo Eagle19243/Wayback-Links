@@ -29,4 +29,5 @@ After adding the WaybackLinks javascript and css to your HTML file, a new link i
 
 * `Get near page modified date ...`: This menu item is similar to the `Get near link date ...`, except it uses the [Schema.org](http://schema.org) attribute `dateModified`, if provided in the linking HTML page. 
 
-
+## Example
+test.html(http://robustlinks.mementoweb.org/demo/uri_references.html)
