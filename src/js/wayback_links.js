@@ -1,25 +1,7 @@
-// toggle to show the "powered by wayback links" footer
-// var WLshowFooter = true;
-
-// add urls that should be excluded from wayback links.
-// accepts full urls or valid regular expression patterns of urls.
-var WLuriPatternsToExclude = [
-    "https?://dx.doi.org*",
-    "https?://doi.org*"
-];
-
-// Determining what is a URL. In this case, either a relative path or a HTTP/HTTPS scheme.
-var WLhasHTTPRegexp = /^https?:/;
-var WLhasColonRegexp = /:/;
-function WLIsURL(href) {
-    return Boolean(href) && (WLhasHTTPRegexp.test(href) || !WLhasColonRegexp.test(href));
-}
-
 // Contains URIs of web archives that should be excluded from wayback links.
-// This list includes base URIs of web archives that rewrite memento urls.
+// This list includes base URIs of web archives that rewrite wayback urls.
 // If unsure, do not edit.
 var WLWebArchiveBaseUriToExclude = [
-    "https?://webarchive.nationalarchives.gov.uk/*",
     "https?://web.archive.org/*"
 ];
 
@@ -28,6 +10,8 @@ var WLSchemaOrgAttributes = {
     "date-published": "Get near page creation date ",
     "date-modified": "Get near page modified date "
 }
+
+var WLLastOpen;
 
 // Helper function to provide indexOf for Internet Explorer
 if (!Array.prototype.indexOf) {
@@ -40,9 +24,15 @@ if (!Array.prototype.indexOf) {
    }
 }
 
+// Determining what is a URL. In this case, either a relative path or a HTTP/HTTPS scheme.
+function WLIsURL(href) {
+    var WLhasHTTPRegexp = /^https?:/;
+    var WLhasColonRegexp = /:/;
+    return Boolean(href) && (WLhasHTTPRegexp.test(href) || !WLhasColonRegexp.test(href));
+}
+
 // Creates a pseudorandom unique ID
-// from https://gist.github.com/gordonbrander/2230317
-var WL_ID = function () {
+function WL_ID() {
   return 'WL_' + Math.random().toString(36).substr(2, 9);
 };
 
@@ -61,7 +51,6 @@ function WL_appendHiddenLink(parent, text, uri) {
 }
 
 // Adds leading '0' to numbers
-// From http://www.w3schools.com/jsref/jsref_gethours.asp
 function WLAddZero(i) {
     if (i < 10) {
         i = "0" + i;
@@ -101,8 +90,8 @@ function WLPrintDate(dateStr){
 }
 
 // Extracts the domain name from an archive url.
-var WLDomainRegExp = new RegExp('(?:https?://)?(?:www\\.)?((?:[A-Za-z0-9_\\.])+)(?:/.*)?','i');
 function WLPrintDomainName(url) {
+    var WLDomainRegExp = new RegExp('(?:https?://)?(?:www\\.)?((?:[A-Za-z0-9_\\.])+)(?:/.*)?','i');
     var match = url.match(WLDomainRegExp);
     if (match){
         if (match.length > 1) {
@@ -118,7 +107,6 @@ function WLPrintDomainName(url) {
 }
 
 // Keeps track of the last open menu to close it.
-var WLLastOpen;
 function WLCloseLastOpen(){
     if(WLLastOpen){
         WLLastOpen.setAttribute('aria-hidden', 'true');
@@ -275,16 +263,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     }
 
-    // Clicking anywhere closes the RLLastOpen menu item if it is present.
+    // Clicking anywhere closes the WLLastOpen menu item if it is present.
     document.onclick = WLCloseLastOpen;
 
-    /*
-    // Show the 'powered by WaybackLinks' link
-    if (RLshowFooter){
-        var footer = document.createElement('footer');
-        footer.setAttribute('class', "RLFooter");
-        footer.innerHTML = '<span style="">Powered by: </span><span><a href="http://robustlinks.mementoweb.org/">Robust Links</a></span> <span class="RLIcon">'+'</span>';
-        document.getElementsByTagName('body')[0].appendChild(footer);
-    }
-    */
 }, false);

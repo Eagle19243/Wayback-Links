@@ -7,7 +7,14 @@
         <meta item-prop="date-modified" content="2014-11-10">
         <link rel = "stylesheet" href = "../src/sass/wayback_links.css">
         <script src="../src/js/wayback_links.js"></script>
-        <script src="http://robustlinks.mementoweb.org/tools/js/robustlinks-uri-exclude-list.js"></script>
+        <script>
+            // add urls that should be excluded from wayback links.
+            // accepts full urls or valid regular expression patterns of urls.
+            var WLuriPatternsToExclude = [
+                "https?://archive.org*",
+                "https?://blog.archive.org*"
+            ];
+        </script>
     </head>
     <body>
         <a href="http://lockss.org/"
