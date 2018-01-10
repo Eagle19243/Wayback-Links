@@ -6,9 +6,7 @@ To build, simply run the following commands:
 * `npm install`
 * `gulp compile`
 
-## Installation
-
-### Add Wayback Links To Your Webpages
+## Add Wayback Links To Your Webpages
 
 Simply append the following lines to the `<head>` of your HTML source:
 
