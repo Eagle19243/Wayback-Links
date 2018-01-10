@@ -143,7 +143,7 @@ document.addEventListener('DOMContentLoaded', function() {
     var metaDates = {}
 
     for(var i=0; i<metas.length; i++) {
-        var metaAttr = WLGetAttribute(metas[i], "itemprop");
+        var metaAttr = WLGetAttribute(metas[i], "item-prop");
         if (metaAttr in WLSchemaOrgAttributes) { 
             var mdate = WLGetAttribute(metas[i], "content");
             metaDates[metaAttr] = {"linkstr": "", "printstr": ""};
