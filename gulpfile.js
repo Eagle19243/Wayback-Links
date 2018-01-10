@@ -60,7 +60,6 @@ gulp.task('scripts', function() {
         .pipe($.umd(umdDeps))
         .pipe($.header(banner, meta))
         .pipe($.rename(meta.name + '.js'))
-        // .pipe(gulp.dest(distDir + "/js")) 
         .pipe($.if(!argv.dev, $.uglify()))
         .pipe($.if(!argv.dev, $.header(banner, meta)))
         .pipe($.if(!argv.dev, $.rename(meta.name + '.min.js')))
