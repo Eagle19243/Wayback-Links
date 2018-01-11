@@ -15,6 +15,12 @@ const WLURL = "https:"+"//web.archive.org/web/";
 
 var WLLastOpen;
 
+if (typeof WLuriPatternsToExclude === 'undefined') {
+    WLuriPatternsToExclude = [
+        "https?://archive.org*"
+    ]
+}
+
 // Helper function to provide indexOf for Internet Explorer
 if (!Array.prototype.indexOf) {
 Array.prototype.indexOf = function(item) {
