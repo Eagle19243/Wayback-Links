@@ -29,5 +29,20 @@ After adding the WaybackLinks javascript and css to your HTML file, a new link i
 
 * `Get near page modified date ...`: This menu item is similar to the `Get near link date ...`, except it uses the [Schema.org](http://schema.org) attribute `date-modified`, if provided in the linking HTML page. 
 
+## Exclude URLs from Wayback Links
+You can exclude certain URLs in your webpage from showing the wayback links drop down menu by adding following script before appending `wayback-links.min.js`
+
+Add urls that should be excluded from wayback links.
+Accepts full urls or valid regular expression patterns of urls.
+
+```
+<script>
+var WLuriPatternsToExclude = [
+    "https?://archive.org*",
+    "https?://blog.archive.org*"
+];
+</script>
+```
+
 ## Example
 * [test.html](https://github.com/Eagle19243/Wayback-Links/blob/master/test/test.html)
